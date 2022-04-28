@@ -1,14 +1,21 @@
 """
 Universidad del Valle de Guatemala
-CC----
-thompson.py
-Proposito: clasificacion de input
+token.py
+Proposito: Token
+Mario Perdomo 18029
 """
+from Attribute import Attribute, Vartype
+# ===== Token =====
+# Depending on the attribute, it creates a token
+# with its own name and value
+class Token(Attribute):
+    def __init__(self, name, value, type = None):
+        super().__init__(self, name, value)
+        self.type = type
 
-class Token:
-    def __init__(self, name, value):
-        self.name = name
-        self.value = value
+    def __repr__(self):
+        if self.type != None:
+            return f'{self.name}  :  {self.value} -> {self.context}'
+        return f'{self.name}  :  {self.value}'
 
-    def __str__(self):
-        return self.name + ":" + self.value
+
