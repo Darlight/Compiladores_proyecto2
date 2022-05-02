@@ -1,8 +1,8 @@
 """
 Universidad del Valle de Guatemala
-CC----
-thompson.py
+lexer.py
 Proposito: Lexema/leyenda de los inputs ingresados
+Mario Perdomo 18029
 """
 from token import Token
 
