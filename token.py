@@ -5,7 +5,8 @@ Proposito: Token
 Mario Perdomo 18029
 """
 from Attribute import Attribute, Vartype
-
+from pickle_utils import GetElementType
+import codecs
 # ===== Token =====
 # Depending on the attribute, it creates a token
 # with its own name and value
@@ -55,7 +56,7 @@ class TokenExpression:
                         self.prev_char not in self.symbol_ignore and \
                         self.last_char not in self.symbol_ignore:
 
-                    yield Variable(VarType.APPEND)
+                    yield Attribute(Vartype.APPEND)
                 yield self.GenerateWord()
 
             # curr_char is a char or string
@@ -64,7 +65,7 @@ class TokenExpression:
                         self.prev_char not in self.symbol_ignore and \
                         self.last_char not in self.symbol_ignore:
 
-                    yield Variable(VarType.APPEND)
+                    yield Attribute(Vartype.APPEND)
                 res = self.GenerateVar(self.curr_char)
                 for var in res:
                     yield var
@@ -75,33 +76,33 @@ class TokenExpression:
                         self.prev_char not in self.symbol_ignore and \
                         self.last_char not in self.symbol_ignore:
 
-                    yield Variable(VarType.APPEND)
+                    yield Attribute(Vartype.APPEND)
 
                 if self.curr_char == '{':
-                    yield Variable(VarType.LKLEENE)
+                    yield Attribute(Vartype.L_KLEENE)
                 elif self.curr_char == '[':
-                    yield Variable(VarType.LBRACKET)
+                    yield Attribute(Vartype.L_BRACK)
                 elif self.curr_char == '(':
-                    yield Variable(VarType.LPAR)
+                    yield Attribute(Vartype.L_PAREN)
 
                 self.Next()
 
             # curr_char is kleene expr.
             elif self.curr_char == '}':
                 self.Next()
-                yield Variable(VarType.RKLEENE)
+                yield Attribute(Vartype.R_KLEENE)
 
             elif self.curr_char == ']':
                 self.Next()
-                yield Variable(VarType.RBRACKET)
+                yield Attribute(Vartype.R_BRACK)
 
             elif self.curr_char == ')':
                 self.Next()
-                yield Variable(VarType.RPAR)
+                yield Attribute(Vartype.R_PAREN)
 
             elif self.curr_char == '|':
                 self.Next()
-                yield Variable(VarType.OR)
+                yield Attribute(Vartype.OR)
 
             elif self.curr_char == ' ':
                 self.Next()
@@ -111,8 +112,8 @@ class TokenExpression:
                 raise Exception(f'Invalid character: {self.curr_char}')
 
         if token_id != None:
-            yield Variable(VarType.APPEND, '.')
-            yield Variable(VarType.STRING, f'#-{token_id}')
+            yield Attribute(Vartype.APPEND, '.')
+            yield Attribute(Vartype.STRING, f'#-{token_id}')
 
     def GenerateWord(self):
         word = self.curr_char
@@ -154,13 +155,13 @@ class TokenExpression:
             except:
                 raise Exception(f'Unvalid char in Generate var: {var}')
 
-            return [Variable(VarType.CHAR, set(chr(ord_)))]
+            return [Attribute(Vartype.CHAR, set(chr(ord_)))]
 
         elif symbol_type == '\"':
             res = list()
             for char in var:
-                res.append(Variable(VarType.STRING, set(char)))
-                res.append(Variable(VarType.APPEND, '.'))
+                res.append(Attribute(Vartype.STRING, set(char)))
+                res.append(Attribute(Vartype.APPEND, '.'))
 
             if self.last_char not in self.closing_symbols:
                 res.pop()

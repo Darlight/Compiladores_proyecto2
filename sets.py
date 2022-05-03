@@ -1,3 +1,13 @@
+
+"""
+Universidad del Valle de Guatemala
+token.py
+Proposito: Sets encontrados adentro de cada corchete o parentesis
+Mario Perdomo 18029
+"""
+
+from pickle_utils import GetCharValue, GetElementType
+from Attribute import Attribute, Vartype
 class SetDecl:
     def __init__(self, set_, idents):
         self.set = iter(set_)
@@ -26,17 +36,17 @@ class SetDecl:
 
             elif self.curr_char == '+':
                 self.Next()
-                yield Variable(VarType.UNION)
+                yield Attribute(Vartype.UNION)
 
             elif self.curr_char == '-':
                 self.Next()
-                yield Variable(VarType.DIFFERENCE)
+                yield Attribute(Vartype.DIFF)
 
             elif self.curr_char == '.':
                 self.Next()
                 if self.curr_char == '.':
                     self.Next()
-                    yield Variable(VarType.RANGE)
+                    yield Attribute(Vartype.RANGE)
                 else:
                     raise Exception(
                         f'Invalid dot found in set: {self.curr_set}')
@@ -56,7 +66,8 @@ class SetDecl:
 
         if 'CHR(' in word:
             res = GetCharValue(word)
-            res = Variable(VarType.CHAR, set(res))
+            
+            res = Attribute(Vartype.CHAR, set(res))
         else:
             res = GetElementType(word, self.idents)
 
@@ -113,15 +124,15 @@ class SetGenerator:
     def GenerateSet(self):
         while self.curr_var != None:
 
-            if self.curr_var.type == VarType.UNION:
+            if self.curr_var.type == Vartype.UNION:
                 self.NewSet('UNION')
                 self.Next()
 
-            elif self.curr_var.type == VarType.DIFFERENCE:
+            elif self.curr_var.type == Vartype.DIFF:
                 self.NewSet('DIFFERENCE')
                 self.Next()
 
-            elif self.curr_var.type == VarType.RANGE:
+            elif self.curr_var.type == Vartype.RANGE:
                 self.NewRange()
                 self.Next()
 
@@ -148,7 +159,7 @@ class SetGenerator:
         self.Next()
         char2 = self.curr_var
 
-        if char1.type != VarType.CHAR or char2.type != VarType.CHAR:
+        if char1.type != Vartype.CHAR or char2.type != Vartype.CHAR:
             raise Exception(
                 f'Unvalid char range found in {self.curr_set}')
 

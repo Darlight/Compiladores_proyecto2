@@ -5,9 +5,11 @@ Proposito: Orden y consumo de los inputs
 Mario Perdomo 18029
 """
 from lexer import Lexer
-from token import Token
+from token import *
 from Nodes import *
 from Attribute import Attribute, Vartype
+
+
 
 class Parser:
     def __init__(self, Lexer):
