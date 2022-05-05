@@ -3,7 +3,7 @@ from lexer import Lexer
 from afd_directo import DDFA
 from parse import Parser
 from pickle_utils import DumpAutomata
-from code_generator import CodeGen
+from python_generator import CodeGen
 from pprint import pprint
 program_title = '''
 
@@ -34,7 +34,7 @@ if __name__ == "__main__":
         grammar_file = sys.argv[1]
 
     # cfg = CFG(grammar_file)
-    cfg = Lexer(grammar_file)
+
     try:
         cfg = Lexer(grammar_file)
     except FileNotFoundError as e:
@@ -45,8 +45,8 @@ if __name__ == "__main__":
 
     allchars = cfg.GetAllChars()
     parser = Parser(cfg)
-    tokens = parser.toSingleExpression()
-    tree = parser.parse(tokens)
+    tokens = parser.ToSingleExpression()
+    tree = parser.Parse(tokens)
 
     # print('\n\n', '='*20, 'ARBOL SINTÁCTICO', '='*20, '\n')
     # pprint(tree)
