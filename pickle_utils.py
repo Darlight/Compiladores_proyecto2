@@ -129,4 +129,4 @@ def WriteToFile(filename: str, content: str):
 
 
 def DumpAutomata(automata):
-    pickle.dump(automata, open('./output/automata.p', 'wb'))
+    pickle.dump(automata, open('./resultados/automata.p', 'wb'))

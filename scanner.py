@@ -53,7 +53,7 @@ def EvalFile(chars):
             continue
 
         curr_state = aut.trans_func["A"][symbol]
-aut = pickle.load(open("./output/automata.p", "rb"))
+aut = pickle.load(open("./resultados/automata.p", "rb"))
 
 file_name = "./input/test_input.txt"
 if len(sys.argv) > 1: file_name = sys.argv[1]

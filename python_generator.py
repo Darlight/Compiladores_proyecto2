@@ -40,7 +40,7 @@ class CodeGen(object):
 
     def ReadAutomataWithPickle(self):
         self.WriteLine(
-            'aut = pickle.load(open("./output/automata.p", "rb"))', newlines=2)
+            'aut = pickle.load(open("./resultados/automata.p", "rb"))', newlines=2)
 
     def WriteEvalFunction(self):
         self.NewMethod('EvalFile', 'chars')
