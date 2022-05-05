@@ -7,7 +7,8 @@ Mario Perdomo 18029
 """
 
 from pickle_utils import GetCharValue, GetElementType
-from Attribute import Attribute, Vartype
+from Attribute import Vartype
+from Elements import Variable
 class SetDecl:
     def __init__(self, set_, idents):
         self.set = iter(set_)
@@ -36,17 +37,17 @@ class SetDecl:
 
             elif self.curr_char == '+':
                 self.Next()
-                yield Attribute(Vartype.UNION)
+                yield Variable(Vartype.UNION)
 
             elif self.curr_char == '-':
                 self.Next()
-                yield Attribute(Vartype.DIFF)
+                yield Variable(Vartype.DIFF)
 
             elif self.curr_char == '.':
                 self.Next()
                 if self.curr_char == '.':
                     self.Next()
-                    yield Attribute(Vartype.RANGE)
+                    yield Variable(Vartype.RANGE)
                 else:
                     raise Exception(
                         f'Invalid dot found in set: {self.curr_set}')
@@ -67,7 +68,7 @@ class SetDecl:
         if 'CHR(' in word:
             res = GetCharValue(word)
             
-            res = Attribute(Vartype.CHAR, set(res))
+            res = Variable(Vartype.CHAR, set(res))
         else:
             res = GetElementType(word, self.idents)
 

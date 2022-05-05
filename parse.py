@@ -4,10 +4,10 @@ parse.py
 Proposito: Orden y consumo de los inputs
 Mario Perdomo 18029
 """
-from lexer import Lexer
-from token import *
+from token_project import *
 from Nodes import *
-from Attribute import Attribute, Vartype
+from Attribute import Vartype
+from Elements import Variable
 
 
 
@@ -32,24 +32,24 @@ class Parser:
     def newSymbol(self):
         token = self.curr_token
 
-        if token.type == Vartype.LPAR:
+        if token.type == Vartype.L_PAREN:
             self.nextToken()
-            res = self.Expression()
+            res = self.expression()
 
-            if self.curr_token.type != Vartype.RPAR:
+            if self.curr_token.type != Vartype.R_PAREN:
                 raise Exception('No right parenthesis for expression!')
 
             self.nextToken()
             return res
 
-        elif token.type == Vartype.CHAR or token.type == Vartype.IDENT or token.type == VarType.STRING:
+        elif token.type == Vartype.CHAR or token.type == Vartype.IDENTIFIER or token.type == Vartype.STRING:
             self.nextToken()
-            if token.type == Vartype.IDENT:
+            if token.type == Vartype.IDENTIFIER:
                 return Symbol(token.value, token.type, token.name)
             return Symbol(token.value, token.type)
 
     def newGroup(self):
-        res = self.NewSymbol()
+        res = self.newSymbol()
 
         while self.curr_token != None and \
                 (
@@ -58,7 +58,7 @@ class Parser:
                 ):
             if self.curr_token.type == Vartype.L_KLEENE:
                 self.nextToken()
-                res = Kleene(self.Expression())
+                res = Kleene(self.expression())
 
                 if self.curr_token.type != Vartype.R_KLEENE:
                     raise Exception('No right curly bracket for a token!')
@@ -66,7 +66,7 @@ class Parser:
 
             elif self.curr_token.type == Vartype.L_BRACK:
                 self.nextToken()
-                res = Bracket(self.Expression())
+                res = Bracket(self.expression())
 
                 if self.curr_token.type != Vartype.R_BRACK:
                     raise Exception('No right bracket for a token!')
@@ -75,20 +75,20 @@ class Parser:
         return res
 
     def term(self):
-        res = self.NewGroup()
+        res = self.newGroup()
 
         while self.curr_token != None and self.curr_token.type == Vartype.APPEND:
             self.nextToken()
-            res = Append(res, self.NewGroup())
+            res = Append(res, self.newGroup())
 
         return res
 
     def expression(self):
-        res = self.Term()
+        res = self.term()
 
         while self.curr_token != None and self.curr_token.type == Vartype.OR:
             self.nextToken()
-            res = Or(res, self.Expression())
+            res = Or(res, self.expression())
 
         return res
     
@@ -98,16 +98,16 @@ class Parser:
         if self.curr_token == None:
             return None
 
-        res = self.Expression()
+        res = self.expression()
         return res
 
     def toSingleExpression(self):
         new_list = list()
         for token in self.lexer.tokens:
             tokens = token.value
-            tokens.insert(0, Attribute(Vartype.L_PAREN, '('))
-            tokens.append(Attribute(Vartype.R_PAREN, ')'))
-            tokens.append(Attribute(Vartype.OR, '|'))
+            tokens.insert(0, Variable(Vartype.L_PAREN, '('))
+            tokens.append(Variable(Vartype.R_PAREN, ')'))
+            tokens.append(Variable(Vartype.OR, '|'))
             new_list += tokens
 
         new_list.pop()

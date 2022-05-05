@@ -2,6 +2,8 @@ import codecs
 import pickle
 from Attribute import Vartype, Attribute
 from re import findall
+
+from Elements import Variable
 """
 Universidad del Valle de Guatemala
 picke_utils.py
@@ -55,7 +57,7 @@ def GetNoAlpha(string):
 
 def IdentExists(ident, char_set):
     try:
-        next(filter(lambda x: x.ident == ident, char_set))
+        next(filter(lambda x: x.identifier == ident, char_set))
         return True
     except StopIteration:
         return False
@@ -63,7 +65,7 @@ def IdentExists(ident, char_set):
 
 def GetIdentValue(ident, char_set):
     try:
-        ident = next(filter(lambda x: x.ident == ident, char_set))
+        ident = next(filter(lambda x: x.identifier == ident, char_set))
         return ident.value
     except StopIteration:
         return None
@@ -91,7 +93,7 @@ def GetElementType(string, char_set):
     if string.count('"') == 2:
         string = string.replace('\"', '')
         val = set([chr(ord(char)) for char in string])
-        return Attribute(Vartype.STRING, val)
+        return Variable(Vartype.STRING, val)
 
     if string.count('\'') == 2:
         char = GetTextFromSingleQuotes(string)
@@ -102,21 +104,21 @@ def GetElementType(string, char_set):
             raise Exception(f'Unvalid char in GetElementType: {string}')
 
         new_set = set(chr(ord_))
-        return Attribute(Vartype.CHAR, new_set)
+        return Variable(Vartype.CHAR, new_set)
 
     if string in CONTEXT_WORDS:
         if 'ANY' == string:
-            return Attribute(Vartype.STRING, ANY_SET)
+            return Variable(Vartype.STRING, ANY_SET)
 
     if string.isdigit():
-        return Attribute(Vartype.NUMBER, string)
+        return Variable(Vartype.NUMBER, string)
 
     if IdentExists(string, char_set):
-        return Attribute(Vartype.IDENTIFIER, GetIdentValue(string, char_set), string)
+        return Variable(Vartype.IDENTIFIER, GetIdentValue(string, char_set), string)
 
     if 'CHR' in string:
         char = set(GetCharValue(string))
-        return Attribute(Vartype.CHAR, char)
+        return Variable(Vartype.CHAR, char)
 
 
 def WriteToFile(filename: str, content: str):

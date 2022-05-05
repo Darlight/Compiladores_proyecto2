@@ -6,18 +6,19 @@ Mario Perdomo 18029
 """
 # ===== Most important Class =====
 # Assigns the attribute with its value and own identifier
-from regex import R
+from enum import Enum
 
 
 class Attribute:
-    def __init__(self, identifier, val) -> None:
+    def __init__(self, identifier, val):
         self.identifier = identifier
-        self.val = val
+        self.value = val
+        
     def __repr__(self) -> str:
         return f'{self.identifier} = {self.value}'
 # ===== Classifier Class =====
 # A
-class Vartype(str):
+class Vartype(Enum):
     IDENTIFIER = 0
     STRING = 1 
     CHAR = 2

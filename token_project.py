@@ -6,6 +6,7 @@ Mario Perdomo 18029
 """
 from Attribute import Attribute, Vartype
 from pickle_utils import GetElementType
+from Elements import Variable
 import codecs
 # ===== Token =====
 # Depending on the attribute, it creates a token
@@ -13,12 +14,12 @@ import codecs
 
 class Token(Attribute):
     def __init__(self, name, value, type = None):
-        super().__init__(self, name, value)
+        super().__init__(name, value)
         self.type = type
 
     def __repr__(self):
         if self.type != None:
-            return f'{self.name}  :  {self.value} -> {self.context}'
+            return f'{self.name}  :  {self.value} -> {self.type}'
         return f'{self.name}  :  {self.value}'
 
 
@@ -56,7 +57,7 @@ class TokenExpression:
                         self.prev_char not in self.symbol_ignore and \
                         self.last_char not in self.symbol_ignore:
 
-                    yield Attribute(Vartype.APPEND)
+                    yield Variable(Vartype.APPEND)
                 yield self.GenerateWord()
 
             # curr_char is a char or string
@@ -65,7 +66,7 @@ class TokenExpression:
                         self.prev_char not in self.symbol_ignore and \
                         self.last_char not in self.symbol_ignore:
 
-                    yield Attribute(Vartype.APPEND)
+                    yield Variable(Vartype.APPEND)
                 res = self.GenerateVar(self.curr_char)
                 for var in res:
                     yield var
@@ -76,33 +77,33 @@ class TokenExpression:
                         self.prev_char not in self.symbol_ignore and \
                         self.last_char not in self.symbol_ignore:
 
-                    yield Attribute(Vartype.APPEND)
+                    yield Variable(Vartype.APPEND)
 
                 if self.curr_char == '{':
-                    yield Attribute(Vartype.L_KLEENE)
+                    yield Variable(Vartype.L_KLEENE)
                 elif self.curr_char == '[':
-                    yield Attribute(Vartype.L_BRACK)
+                    yield Variable(Vartype.L_BRACK)
                 elif self.curr_char == '(':
-                    yield Attribute(Vartype.L_PAREN)
+                    yield Variable(Vartype.L_PAREN)
 
                 self.Next()
 
             # curr_char is kleene expr.
             elif self.curr_char == '}':
                 self.Next()
-                yield Attribute(Vartype.R_KLEENE)
+                yield Variable(Vartype.R_KLEENE)
 
             elif self.curr_char == ']':
                 self.Next()
-                yield Attribute(Vartype.R_BRACK)
+                yield Variable(Vartype.R_BRACK)
 
             elif self.curr_char == ')':
                 self.Next()
-                yield Attribute(Vartype.R_PAREN)
+                yield Variable(Vartype.R_PAREN)
 
             elif self.curr_char == '|':
                 self.Next()
-                yield Attribute(Vartype.OR)
+                yield Variable(Vartype.OR)
 
             elif self.curr_char == ' ':
                 self.Next()
@@ -112,8 +113,8 @@ class TokenExpression:
                 raise Exception(f'Invalid character: {self.curr_char}')
 
         if token_id != None:
-            yield Attribute(Vartype.APPEND, '.')
-            yield Attribute(Vartype.STRING, f'#-{token_id}')
+            yield Variable(Vartype.APPEND, '.')
+            yield Variable(Vartype.STRING, f'#-{token_id}')
 
     def GenerateWord(self):
         word = self.curr_char
@@ -155,13 +156,13 @@ class TokenExpression:
             except:
                 raise Exception(f'Unvalid char in Generate var: {var}')
 
-            return [Attribute(Vartype.CHAR, set(chr(ord_)))]
+            return [Variable(Vartype.CHAR, set(chr(ord_)))]
 
         elif symbol_type == '\"':
             res = list()
             for char in var:
-                res.append(Attribute(Vartype.STRING, set(char)))
-                res.append(Attribute(Vartype.APPEND, '.'))
+                res.append(Variable(Vartype.STRING, set(char)))
+                res.append(Variable(Vartype.APPEND, '.'))
 
             if self.last_char not in self.closing_symbols:
                 res.pop()

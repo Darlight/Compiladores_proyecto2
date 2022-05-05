@@ -34,7 +34,7 @@ if __name__ == "__main__":
         grammar_file = sys.argv[1]
 
     # cfg = CFG(grammar_file)
-
+    cfg = Lexer(grammar_file)
     try:
         cfg = Lexer(grammar_file)
     except FileNotFoundError as e:
@@ -45,8 +45,8 @@ if __name__ == "__main__":
 
     allchars = cfg.GetAllChars()
     parser = Parser(cfg)
-    tokens = parser.ToSingleExpression()
-    tree = parser.Parse(tokens)
+    tokens = parser.toSingleExpression()
+    tree = parser.parse(tokens)
 
     # print('\n\n', '='*20, 'ARBOL SINTÁCTICO', '='*20, '\n')
     # pprint(tree)

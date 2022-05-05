@@ -4,9 +4,9 @@ lexer.py
 Proposito: Lexema/leyenda de los inputs ingresados
 Mario Perdomo 18029
 """
-from token import Token, TokenExpression
-from parse import SetGenerator, SetDecl
-from Attribute import *
+from token_project import Token, TokenExpression
+from sets import SetGenerator, SetDecl
+from Attribute import Vartype, Attribute
 from Elements import *
 from pickle_utils import IdentExists
 from afd_directo import DDFA
@@ -29,7 +29,7 @@ class Lexer:
         self.file_lines = self.ReadFile()
         self.curr_line = None
         self.Next()
-
+        
         self.ReadLines()
         self.allchars = set()
 

@@ -5,7 +5,7 @@ Proposito: Generador del lenguaje a traves de un cocor
 Mario Perdomo 18029
 """
 import os
-
+from token_project import Token
 
 class CodeGen(object):
     cr = '\r'
@@ -66,9 +66,9 @@ class CodeGen(object):
 ''')
 
         for token in self.tokens:
-            if token.context:
+            if token.type:
                 self.WriteLine(
-                    f'if token_type == "{token.ident}" and token_val in aut.keywords_value:', 3)
+                    f'if token_type == "{{token.name}}" and token_val in aut.keywords_value:', 3)
                 self.WriteLine(
                     f'keyword = next(filter(lambda x: x.value.value == token_val, aut.keywords))', 4)
                 self.WriteLine(
