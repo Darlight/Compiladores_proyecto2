@@ -1,15 +1,17 @@
+"""
+Universidad del Valle de Guatemala
+pickle_utils.py
+Proposito: Manejo de leer archivos y crear outputs con la gramatica ingresada
+Mario Perdomo 18029
+"""
+
 import codecs
 import pickle
 from Attribute import Vartype, Attribute
 from re import findall
 
 from Elements import Variable
-"""
-Universidad del Valle de Guatemala
-picke_utils.py
-Proposito: Manejo de leer archivos y crear outputs con la gramatica ingresada
-Mario Perdomo 18029
-"""
+
 CONTEXT_WORDS = ['ANY']
 ANY_SET = set([chr(char) for char in range(0, 256)])
 

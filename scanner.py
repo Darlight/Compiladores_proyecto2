@@ -43,11 +43,11 @@ def EvalFile(chars):
 
 
         if token_val:
-            print(f"{repr(token_val)}\t=>\t{token_type}")
+            print(f"{repr(token_val)}\t--->\t{token_type}")
         token_val = symbol
 
         if not symbol in aut.trans_func["A"]:
-            print(f"{repr(token_val)}\t=>\tNone")
+            print(f"{repr(token_val)}\t--->\tNone")
             token_val = ""
             curr_state = "A"
             continue
@@ -55,7 +55,7 @@ def EvalFile(chars):
         curr_state = aut.trans_func["A"][symbol]
 aut = pickle.load(open("./resultados/automata.p", "rb"))
 
-file_name = "./input/test_input.txt"
+file_name = "./gramatica/ArchivoPrueba1Entrada.txt"
 if len(sys.argv) > 1: file_name = sys.argv[1]
 chars = ReadFile(file_name)
 EvalFile(chars)

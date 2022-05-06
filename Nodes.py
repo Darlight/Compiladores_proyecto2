@@ -1,6 +1,6 @@
 """
 Universidad del Valle de Guatemala
-Node.py
+Nodes.py
 Proposito: Representacion de Diferentes tipos de nodes
 Mario Perdomo 18029
 """

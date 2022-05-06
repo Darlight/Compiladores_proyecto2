@@ -1,6 +1,6 @@
 """
 Universidad del Valle de Guatemala
-code_generator.py
+python_generator.py
 Proposito: Generador del lenguaje a traves de un cocor
 Mario Perdomo 18029
 """

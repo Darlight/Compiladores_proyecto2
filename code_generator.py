@@ -40,7 +40,7 @@ class CodeGen(object):
 
     def ReadAutomataWithPickle(self):
         self.WriteLine(
-            'aut = pickle.load(open("./output/automata.p", "rb"))', newlines=2)
+            'aut = pickle.load(open("./resultados/automata.p", "rb"))', newlines=2)
 
     def WriteEvalFunction(self):
         self.NewMethod('EvalFile', 'chars')
@@ -92,7 +92,7 @@ class CodeGen(object):
 ''')
 
     def WriteGetFileFunction(self):
-        self.WriteLine('file_name = "./input/test_input.txt"')
+        self.WriteLine('file_name = "./gramatica/ArchivoPrueba1Entrada.txt"')
         self.WriteLine('if len(sys.argv) > 1: file_name = sys.argv[1]')
 
     def WriteReadFileFunction(self):
