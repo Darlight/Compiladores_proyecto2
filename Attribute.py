@@ -17,7 +17,7 @@ class Attribute:
     def __repr__(self) -> str:
         return f'{self.identifier} = {self.value}'
 # ===== Classifier Class =====
-# A
+
 class Vartype(Enum):
     IDENTIFIER = 0
     STRING = 1 

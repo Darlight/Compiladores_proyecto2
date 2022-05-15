@@ -1,3 +1,1 @@
-dif 		 IF formato variable1 455 if if12 IFif 9 12DH	HD12
-
-// Salida: identificador tabulador tabulador IF identificador identificador numero if identificador identificador numero numeroHex tabulador identificador
+dif 		 IF formato variable1 455num if if12 IFif 9num 12DH

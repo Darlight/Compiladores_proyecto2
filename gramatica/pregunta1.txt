@@ -1,0 +1,8 @@
+cadena
+espacioEnBlanco
+numeroDecimal
+espacioEnBlanco
+numero
+espacioEnBlanco
+identificador
+cadena

@@ -10,7 +10,7 @@ from pickle_utils import WriteToFile
 RAW_STATES = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
 
 
-class DDFA:
+class FDA:
     def __init__(self, tree, symbols, keywords, ignore_set):
 
         # Useful for syntax tree

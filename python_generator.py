@@ -6,16 +6,17 @@ Mario Perdomo 18029
 """
 import os
 from token_project import Token
+from Elements import Keyword
 
 class CodeGen(object):
     cr = '\r'
     lf = '\n'
     tab = '    '
 
-    def __init__(self, output_dir, tokens, ddfa):
+    def __init__(self, output_dir, tokens, fda):
         self.output_dir = output_dir
         self.tokens = tokens
-        self.ddfa = ddfa
+        self.fda = fda
         self.file = None
 
     def CreateFile(self):
@@ -79,11 +80,11 @@ class CodeGen(object):
 
         self.file.write('''
         if token_val:
-            print(f"{repr(token_val)}\\t=>\\t{token_type}")
+            print(f"{repr(token_val)}\\t--->\\t{token_type}")
         token_val = symbol
 
         if not symbol in aut.trans_func["A"]:
-            print(f"{repr(token_val)}\\t=>\\tNone")
+            print(f"{repr(token_val)}\\t--->\\tNone")
             token_val = ""
             curr_state = "A"
             continue
@@ -92,7 +93,7 @@ class CodeGen(object):
 ''')
 
     def WriteGetFileFunction(self):
-        self.WriteLine('file_name = "./input/test_input.txt"')
+        self.WriteLine('file_name = "./gramatica/ArchivoPrueba1Entrada.txt"')
         self.WriteLine('if len(sys.argv) > 1: file_name = sys.argv[1]')
 
     def WriteReadFileFunction(self):
@@ -112,62 +113,12 @@ class CodeGen(object):
 
         self.WriteLine('return chars', 1, 2)
 
-    def WriteAutomataClass(self):
-        self.WriteLine(f'''
-class Automata:
-    def __init__(self):
-        self.trans_func = dict()
-        self.accepting_states = set()
-        self.accepting_dict = dict()
-        self.nodes = list()
-        self.keywords = dict()
-
-    def AddTransition(self, state, value):
-        self.trans_func[state] = value
-
-    def AddAcceptingState(self, new_state, value):
-        self.accepting_states.update(new_state)
-        self.accepting_dict[new_state] = value
-
-    def AddNode(self, _id, value):
-        self.nodes.append(Node(_id, value))
-
-    def AddKeyword(self, keyword, value):
-        self.keywords[keyword] = value
-
-
-class Node:
-    def __init__(self, _id, value):
-        self._id = _id
-        self.value = value
-
-aut = Automata()''')
-
-        for state, value in self.ddfa.trans_func.items():
-            self.WriteLine(f'aut.AddTransition("{state}", {value})')
-
-        self.WriteLine('\n# Add the accepting states')
-        for state, value in self.ddfa.accepting_dict.items():
-            self.WriteLine(f'aut.AddAcceptingState("{state}", {value})')
-
-        self.WriteLine('\n# Add the nodes of the accepting states')
-        for node in self.ddfa.nodes:
-            if '#-' in node.value:
-                self.WriteLine(f'aut.AddNode({node._id}, "{node.value}")')
-
-        self.WriteLine('\n# Finally, add the keywords')
-        for keyword in self.ddfa.keywords:
-            self.WriteLine(
-                f'aut.AddKeyword("{keyword.ident}", "{keyword.value.value}")')
-        self.WriteLine('\n')
 
     def GenerateScannerFile(self):
         self.CreateFile()
         self.WriteLine('import pickle')
         self.WriteLine('import sys', newlines=2)
         self.WriteLine('global aut', newlines=2)
-
-        # self.WriteAutomataClass()
 
         self.WriteReadFileFunction()
 

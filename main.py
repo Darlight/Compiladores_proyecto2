@@ -5,9 +5,10 @@ Proposito: Generador del lenguaje a traves de un cocor
 Mario Perdomo 18029
 """
 
+ 
 import sys
 from lexer import Lexer
-from afd_directo import DDFA
+from afd_directo import FDA
 from parse import Parser
 from pickle_utils import DumpAutomata
 from python_generator import CodeGen
@@ -35,16 +36,15 @@ if __name__ == "__main__":
     parser = Parser(lexer)
     tokens = parser.toSingleExpression()
     tree = parser.parse(tokens)
+    #print('\n\n', '='*20, 'ARBOL SINTÁCTICO', '='*20, '\n')
+    #pprint(tree)
+   
 
-    # print('\n\n', '='*20, 'ARBOL SINTÁCTICO', '='*20, '\n')
-    # pprint(tree)
-    # print(tokens)
 
+    fda = FDA(tree, allchars, lexer.keywords, lexer.ignore)
+    DumpAutomata(fda)
 
-    ddfa = DDFA(tree, allchars, lexer.keywords, lexer.ignore)
-    DumpAutomata(ddfa)
-
-    CodeGen('./scanner.py', lexer.tokens, ddfa).GenerateScannerFile()
+    CodeGen('./scanner.py', lexer.tokens, fda).GenerateScannerFile()
 
     print(
     """

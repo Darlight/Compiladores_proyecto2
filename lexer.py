@@ -9,7 +9,7 @@ from sets import SetGenerator, SetDecl
 from Attribute import Vartype, Attribute
 from Elements import *
 from pickle_utils import IdentExists
-from afd_directo import DDFA
+from afd_directo import FDA
 from parse import Parser
 
 
@@ -77,7 +77,7 @@ class Lexer:
 
                 elif 'TOKENS' in self.curr_line:
                     self.Next()
-                    # print('\n', '='*20, 'TOKENS', '='*20)
+                    #print tokens
                     self.ReadSection('TOKENS')
 
                 elif 'IGNORE' in self.curr_line:
@@ -104,7 +104,7 @@ class Lexer:
         while not any(word in SCANNER_WORDS for word in self.curr_line):
             curr_set = ' '.join(self.curr_line)
 
-            # Is there a comment?
+            # reads comment
             if '(.' in curr_set[:2]:
                 self.ReadComment()
 
@@ -114,9 +114,9 @@ class Lexer:
                 self.GetKeyValue(curr_set, section)
                 self.Next()
 
-            # elif '=' in curr_set and not '.' == curr_set[-1]:
-            #     print('\nWARNING: Statement without ending (Ignored):', curr_set)
-            #     self.Next()
+            elif '=' in curr_set and not '.' == curr_set[-1]:
+                 print('\nWARNING: Statement without ending (Ignored):', curr_set)
+                 self.Next()
 
             # If it doesn't contains a ., it's probably part of the previous set
             elif not '.' == curr_set[-1]:
@@ -180,8 +180,8 @@ class Lexer:
         parser = TokenExpression(value, self.characters)
         value = parser.Parse(token_id=ident)
         token = Token(ident, list(value), context)
-        # print()
-        # print(f'{token}')
+        #print()
+        #print(f'{token}')
         self.tokens.append(token)
 
     def KeywordDecl(self, line):
@@ -206,11 +206,11 @@ class Lexer:
         key = key.strip()
         set_decl = SetDecl(value, self.characters)
         value = list(set_decl.Set())
-        # print()
-        # print(f'CRUDO:\n{key}: {value}')
+        print()
+        print(f'ATG FILE:\n{key}: {value}')
         final_set = SetGenerator(value, self.characters).GenerateSet()
-        # print()
-        # print(f'GENERADO\n{key}: {final_set}')
+        print()
+        print(f'Clasificado\n{key}: {final_set}')
         self.characters.append(Character(key, final_set))
 
     def GenerateSet(self, eval_set):
